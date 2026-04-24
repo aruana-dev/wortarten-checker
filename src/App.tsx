@@ -8,7 +8,7 @@ import { analysiereText } from './lib/api'
 import { ALLE_WORTARTEN, type WortartKey } from './lib/wortarten'
 import type { Token } from './types'
 
-const MAX_TEXT = 2000
+const MAX_TEXT = 1200
 const MIN_WORTARTEN = 2
 
 type Phase = 'edit' | 'loading' | 'quiz'

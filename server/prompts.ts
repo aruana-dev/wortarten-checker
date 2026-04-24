@@ -25,8 +25,8 @@ Regeln:
 2. Bei Mehrdeutigkeit den Satzkontext beachten: "das Laufen" → Nomen; "wir laufen" → Verb.
 3. Bindestrich-Wörter bleiben ein Token ("E-Mail").
 4. Zahlen als Ziffern ("5") sind Numerale.
-5. Die "begruendung" soll EIN kurzer, kindgerechter Satz sein — nennt die entscheidende Frage (z. B. "Es sagt, WAS der Hund tut" für ein Verb). Keine Fachbegriffe wie "finites Verb" oder "Akkusativobjekt".
-6. "grundform" nur ausfüllen bei Nomen (Nominativ Singular), Verben (Infinitiv), Adjektiven (Grundform ohne Endung). Ansonsten weglassen.
+5. Die "begruendung" ist EIN kurzer Satz, MAXIMAL 12 Wörter, kindgerecht. Nennt die entscheidende Frage (z. B. "Sagt, was der Hund tut"). Keine Fachbegriffe, keine Abkürzungen.
+6. "grundform" nur bei Nomen (Nominativ Singular), Verben (Infinitiv), Adjektiven (Grundform). Sonst weglassen. Für kurze Funktionswörter (Artikel, Pronomen, Präpositionen, Konjunktionen) IMMER weglassen.
 7. Die Reihenfolge der Tokens MUSS exakt der Reihenfolge im Originaltext entsprechen.
 8. Gib NUR das Tool zurück, keinen zusätzlichen Fliesstext.
 

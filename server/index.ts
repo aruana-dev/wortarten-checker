@@ -15,7 +15,9 @@ if (!apiKey) {
 
 const anthropic = new Anthropic({ apiKey })
 const MODEL = 'claude-sonnet-4-6'
-const MAX_TEXT = 2000
+const MAX_TEXT = 1200
+const ANALYSE_MAX_TOKENS = 8192
+const GEN_MAX_TOKENS = 2048
 
 const WORTARTEN_ERLAUBT = new Set([
   'Nomen', 'Verb', 'Adjektiv', 'Artikel', 'Pronomen',
@@ -44,21 +46,29 @@ app.post('/api/analyse', async (req, res) => {
 
     const msg = await anthropic.messages.create({
       model: MODEL,
-      max_tokens: 4096,
+      max_tokens: ANALYSE_MAX_TOKENS,
       system: [{ type: 'text', text: ANALYSE_SYSTEM, cache_control: { type: 'ephemeral' } }],
       tools: [ANALYSE_TOOL as any],
       tool_choice: { type: 'tool', name: 'markiere_wortarten' },
       messages: [{ role: 'user', content: userNachricht }],
     })
 
+    if (msg.stop_reason === 'max_tokens') {
+      console.error('max_tokens erreicht. Textlänge:', text.length, 'Zeichen. usage:', msg.usage)
+      return res.status(502).json({
+        error: 'Der Text ist zu lang für eine vollständige Analyse. Kürze ihn auf ca. 150 Wörter.',
+      })
+    }
+
     const toolBlock = msg.content.find((c) => c.type === 'tool_use')
     if (!toolBlock || toolBlock.type !== 'tool_use') {
-      console.error('Kein tool_use in Antwort:', JSON.stringify(msg.content).slice(0, 500))
+      console.error('Kein tool_use. stop_reason:', msg.stop_reason, 'content:', JSON.stringify(msg.content).slice(0, 800))
       return res.status(502).json({ error: 'Die KI hat keine gültige Antwort gegeben.' })
     }
     const input = toolBlock.input as { tokens?: unknown }
     if (!input || !Array.isArray(input.tokens)) {
-      return res.status(502).json({ error: 'Die KI-Antwort hatte nicht das erwartete Format.' })
+      console.error('input.tokens fehlt. input:', JSON.stringify(input).slice(0, 800), 'stop_reason:', msg.stop_reason, 'usage:', msg.usage)
+      return res.status(502).json({ error: 'Die KI-Antwort hatte nicht das erwartete Format. Versuche einen kürzeren Text.' })
     }
     res.json({ tokens: input.tokens })
   } catch (e: any) {
@@ -91,7 +101,7 @@ app.post('/api/generiere', async (req, res) => {
 
     const msg = await anthropic.messages.create({
       model: MODEL,
-      max_tokens: 1024,
+      max_tokens: GEN_MAX_TOKENS,
       system: [{ type: 'text', text: GEN_SYSTEM, cache_control: { type: 'ephemeral' } }],
       tools: [GEN_TOOL as any],
       tool_choice: { type: 'tool', name: 'schreibe_uebungstext' },
@@ -100,6 +110,7 @@ app.post('/api/generiere', async (req, res) => {
 
     const toolBlock = msg.content.find((c) => c.type === 'tool_use')
     if (!toolBlock || toolBlock.type !== 'tool_use') {
+      console.error('Gen: kein tool_use. stop_reason:', msg.stop_reason)
       return res.status(502).json({ error: 'Die KI hat keinen Text gesendet.' })
     }
     const input = toolBlock.input as { text?: unknown; thema?: unknown }
