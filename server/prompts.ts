@@ -30,6 +30,8 @@ Regeln:
 7. Die Reihenfolge der Tokens MUSS exakt der Reihenfolge im Originaltext entsprechen.
 8. Gib NUR das Tool zurück, keinen zusätzlichen Fliesstext.
 
+Schweizer Rechtschreibung: Verwende NIEMALS das scharfe S (ß). Schreibe immer "ss" — auch in Begründungen. Beispiele: "Spass" (nicht "Spaß"), "gross" (nicht "groß"), "weiss" (nicht "weiß"), "Strasse" (nicht "Straße").
+
 Sei präzise. Schüler vertrauen deiner Antwort und lernen daraus. Lieber einmal mehr im Kopf prüfen.`
 
 export const GEN_SYSTEM = `Du schreibst kurze Übungstexte auf Hochdeutsch für Schüler, die Wortarten bestimmen üben.
@@ -44,6 +46,7 @@ Regeln:
 - VERBOTEN: Gewalt, Angst, Tod, Politik, Religion, Marken, Namen realer Personen, Alkohol, Drogen, Diskriminierung.
 - Wenn Wortarten im Fokus genannt sind, baue diese natürlich ein (übertreibe es aber nicht — der Text muss natürlich klingen).
 - Keine direkte Rede in Anführungszeichen, keine seltenen Fremdwörter.
+- Schweizer Rechtschreibung: Verwende NIEMALS das scharfe S (ß). Schreibe immer "ss". Beispiele: "Spass", "gross", "weiss", "Strasse", "heisst", "draussen", "Fuss".
 - Gib NUR das Tool zurück.`
 
 export const ANALYSE_TOOL = {
